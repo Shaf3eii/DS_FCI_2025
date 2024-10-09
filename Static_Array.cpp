@@ -78,11 +78,35 @@ public:
             arr[nd] = temp;
         }
     }
+    bool is_sorted() const { // o(n) time - o(1) memory
+        if(!size || size == 1)
+            return true;
+        for(int i = 0 ; i < size - 1 ; ++i)
+            if(arr[i] > arr[i + 1])
+                return false;
+
+        return true;
+    }
     // look for element --> return it's idx   (Linear Search)
     // We can use binary search --> cons -> arr should be sorted
-    int search(T val) const { // o(n) time - o(1) memory
+    int search(T val) const {
         if(size == 0)
             throw std::runtime_error("The Array is Empty..\n");
+
+        // 1. Binary Search // o(log(n)) time - o(1) memory
+        if(is_sorted()) {
+            int st = 0, nd = size - 1, mid;
+            while(st < nd) {
+                mid = st + (nd - st) / 2;
+                if(arr[mid] == val)
+                    return mid;
+                else if(arr[mid] > val)
+                    nd = mid - 1;
+                else
+                    st = mid + 1;
+            }
+        }
+        // 2. Linear Search  // o(n) time - o(1) memory
         for(int i = 0 ; i < size ; ++i)
             if(arr[i] == val)
                 return i; // founded
